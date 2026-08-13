@@ -288,22 +288,27 @@ orderList.addEventListener("click", (event) => {
    ทดสอบ: เว้นชื่อว่าง/ไม่สั่งอะไร → เตือน ; กรอกครบ → ขึ้นสรุปสีเขียว หน้าไม่รีเฟรช
 ------------------------------------------------------------ */
 // TODO STEP 5
+// STEP 5
 form.addEventListener("submit", (event) => {
+
   event.preventDefault();
 
   const customerName = customer.value.trim();
 
-  // ตรวจสอบข้อมูล
-  if (customerName === "" || order.length === 0) {
-    message.className = "err";
+  // ตรวจสอบชื่อ
+  if (customerName === "") {
 
-    if (customerName === "" && order.length === 0) {
-      message.textContent = "กรุณากรอกชื่อลูกค้าและสั่งเครื่องดื่มก่อน";
-    } else if (customerName === "") {
-      message.textContent = "กรุณากรอกชื่อลูกค้า";
-    } else {
-      message.textContent = "กรุณาสั่งเครื่องดื่มก่อนยืนยันออเดอร์";
-    }
+    message.className = "err";
+    message.textContent = "กรุณากรอกชื่อลูกค้า";
+
+    return;
+  }
+
+  // ตรวจสอบว่ามีออเดอร์หรือยัง
+  if (order.length === 0) {
+
+    message.className = "err";
+    message.textContent = "กรุณาสั่งเครื่องดื่มก่อนยืนยันออเดอร์";
 
     return;
   }
@@ -311,15 +316,14 @@ form.addEventListener("submit", (event) => {
   // คำนวณยอดรวม
   const total = order.reduce((sum, item) => sum + item.price, 0);
 
-  // แสดงผลแบบปลอดภัยด้วย textContent
+  // แสดงข้อความสรุป
   message.className = "ok";
   message.textContent =
     `ออเดอร์ของคุณ ${customerName} ทั้งหมด ${order.length} แก้ว รวม ${total} บาท`;
 
-  // ล้างข้อมูลหลังยืนยัน
-  order = [];
-  render();
-  form.reset();
+  // ล้างเฉพาะช่องชื่อลูกค้า
+  customer.value = "";
+
 });
 
 
